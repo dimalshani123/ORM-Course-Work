@@ -3,6 +3,7 @@ package lk.ijse;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -13,10 +14,10 @@ public class LauncherWrapper extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        BorderPane borderPane = FXMLLoader.load(getClass().getResource("/view/dashboardForm.fxml"));
-        Scene scene = new Scene(borderPane);
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/loginForm.fxml"));
+        Scene scene = new Scene(anchorPane);
         stage.setScene(scene);
-        stage.setTitle("Dashboard Form");
+        stage.setTitle("Login Form");
         stage.show();
     }
 }

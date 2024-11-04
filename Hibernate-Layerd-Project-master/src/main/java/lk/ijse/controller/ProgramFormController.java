@@ -9,9 +9,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import lk.ijse.bo.BOFactory;
-import lk.ijse.bo.custom.ItemBO;
+import lk.ijse.bo.custom.ProgramBO;
 import lk.ijse.dto.ProgramDTO;
 import lk.ijse.entity.tm.ProgramTm;
 
@@ -46,7 +45,7 @@ public class ProgramFormController {
     @FXML
     private TextField txtDuration;
 
-    ItemBO itemBO = (ItemBO) BOFactory.getBOFactory().getBOType(BOFactory.BOType.ITEM);
+    ProgramBO programBO = (ProgramBO) BOFactory.getBOFactory().getBOType(BOFactory.BOType.PROGRAM);
 
     public void initialize() {
         setItemTable();
@@ -62,25 +61,49 @@ public class ProgramFormController {
         txtDuration.clear();
     }
 
+//    private String generateItemId() {
+//        try {
+//            String currentId = programBO.getCurrentId();
+//            if (currentId != null) {
+//                String[] split = currentId.split("P00");
+//                int idNum = Integer.parseInt(split[1]);
+//                String availableId = "P00" + ++idNum;
+//                txtId.setText(availableId);
+//                return availableId;
+//            } else {
+//                txtId.setText("P001");
+//                return "P001";
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
+
     private String generateItemId() {
         try {
-            String currentId = itemBO.getCurrentId();
-            if (currentId != null) {
-                String[] split = currentId.split("P00");
-                int idNum = Integer.parseInt(split[1]);
-                String availableId = "P00" + ++idNum;
-                txtId.setText(availableId);
-                return availableId;
+            String currentId = programBO.getCurrentId();
+            if (currentId != null && currentId.matches("P\\d{3}")) {
+                // Extract the numeric part and increment it
+                int idNum = Integer.parseInt(currentId.substring(1)); // Removes the 'P' prefix and parses the number
+                idNum++; // Increment the number
+                String newId = String.format("P%03d", idNum); // Format the number as Pxxx (e.g., P001, P002)
+                txtId.setText(newId);
+                return newId;
             } else {
+                // If currentId is null or format is not recognized, start from P001
                 txtId.setText("P001");
                 return "P001";
             }
         } catch (Exception e) {
             e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error generating ID").show();
         }
 
         return null;
     }
+
 
     private void tableSelection() {
         tblItem.setOnMouseClicked(event -> {
@@ -93,7 +116,7 @@ public class ProgramFormController {
     }
 
     private void setCellValueFactory() {
-        clmId.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
+        clmId.setCellValueFactory(new PropertyValueFactory<>("programCode"));
         clmName.setCellValueFactory(new PropertyValueFactory<>("name"));
         clmPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         clmDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
@@ -101,30 +124,30 @@ public class ProgramFormController {
 
     private void setItemTable() {
         ObservableList<ProgramTm> obList = FXCollections.observableArrayList();
-        List<ProgramDTO> items = itemBO.getAll();
-        for (ProgramDTO itemDto : items) {
-            ProgramTm itemTm = new ProgramTm(
-                    itemDto.getItemCode(),
-                    itemDto.getName(),
-                    itemDto.getPrice(),
-                    itemDto.getDuration()
+        List<ProgramDTO> programs = programBO.getAll();
+        for (ProgramDTO programDto : programs) {
+            ProgramTm programTm = new ProgramTm(
+                    programDto.getProgramCode(),
+                    programDto.getName(),
+                    programDto.getPrice(),
+                    programDto.getDuration()
             );
-            obList.add(itemTm);
+            obList.add(programTm);
         }
         tblItem.setItems(obList);
     }
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        boolean isDeleted = itemBO.delete(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
+        boolean isDeleted = programBO.delete(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
         if (isDeleted) {
             clearFields();
             setItemTable();
             setCellValueFactory();
             tblItem.refresh();
-            new Alert(Alert.AlertType.CONFIRMATION, "Item deleted successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "Program deleted successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Item deleted unsuccessfully");
+            new Alert(Alert.AlertType.ERROR, "Program deleted unsuccessfully");
         }
     }
 
@@ -132,30 +155,30 @@ public class ProgramFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        boolean isSaved = itemBO.save(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
+        boolean isSaved = programBO.save(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
         if (isSaved) {
             clearFields();
             txtId.setText(generateItemId());
             setItemTable();
             setCellValueFactory();
             tblItem.refresh();
-            new Alert(Alert.AlertType.CONFIRMATION, "Item saved successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "Program saved successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Item saved unsuccessfully");
+            new Alert(Alert.AlertType.ERROR, "Program saved unsuccessfully");
         }
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        boolean isUpdated = itemBO.update(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
+        boolean isUpdated = programBO.update(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
         if (isUpdated) {
             clearFields();
             setItemTable();
             setCellValueFactory();
             tblItem.refresh();
-            new Alert(Alert.AlertType.CONFIRMATION, "Item updated successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "Program updated successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Item updated unsuccessfully");
+            new Alert(Alert.AlertType.ERROR, "Program updated unsuccessfully");
         }
     }
 

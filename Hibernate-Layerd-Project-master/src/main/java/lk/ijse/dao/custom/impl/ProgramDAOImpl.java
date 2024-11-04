@@ -66,7 +66,7 @@ public class ProgramDAOImpl implements ProgramDAO {
     public List<String> getIds() {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createNativeQuery("select itemCode from Item");
+        Query query = session.createNativeQuery("select programCode from Program");
         List<String> resultList = query.getResultList();
         transaction.commit();
         session.close();
@@ -77,7 +77,7 @@ public class ProgramDAOImpl implements ProgramDAO {
     public String getCurrentId() {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("select itemCode from Program order by itemCode desc limit 1");
+        Query query = session.createQuery("select programCode from Program order by programCode desc limit 1");
         String id = (String) query.uniqueResult();
         transaction.commit();
         session.close();
@@ -88,12 +88,12 @@ public class ProgramDAOImpl implements ProgramDAO {
     public Program getObject(String value) {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from Program where itemCode = ?1");
+        Query query = session.createQuery("from Program where programCode = ?1");
         query.setParameter(1,value);
-        Program item = (Program) query.uniqueResult();
-        System.out.println(item);
+        Program program = (Program) query.uniqueResult();
+        System.out.println(program);
         transaction.commit();
         session.close();
-        return item;
+        return program;
     }
 }

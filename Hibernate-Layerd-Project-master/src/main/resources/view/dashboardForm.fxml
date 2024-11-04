@@ -15,8 +15,9 @@
                   <Font name="System Bold Italic" size="16.0" />
                </font>
             </Text>
-            <Button fx:id="btnCustomer" layoutX="20.0" layoutY="90.0" mnemonicParsing="false" onAction="#btnCustomerOnAction" prefHeight="25.0" prefWidth="85.0" style="-fx-background-color: lightgray; -fx-border-color: gray; -fx-border-radius: 10px;" text="Customer" />
-            <Button fx:id="btnItem" layoutX="20.0" layoutY="129.0" mnemonicParsing="false" onAction="#btnItemOnAction" prefHeight="25.0" prefWidth="85.0" style="-fx-background-color: lightgray; -fx-border-color: gray; -fx-border-radius: 10px;" text="Program" />
+            <Button fx:id="btnCustomer" layoutX="23.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnCustomerOnAction" prefHeight="25.0" prefWidth="85.0" style="-fx-background-color: lightgray; -fx-border-color: gray; -fx-border-radius: 10px;" text="Student" />
+            <Button fx:id="btnProgram" layoutX="23.0" layoutY="154.0" mnemonicParsing="false" onAction="#btnProgramOnAction" prefHeight="25.0" prefWidth="85.0" style="-fx-background-color: lightgray; -fx-border-color: gray; -fx-border-radius: 10px;" text="Program" />
+            <Button fx:id="btnUser" layoutX="23.0" layoutY="207.0" mnemonicParsing="false" onAction="#btnUserOnAction" prefHeight="25.0" prefWidth="85.0" style="-fx-background-color: lightgray; -fx-border-color: gray; -fx-border-radius: 10px;" text="User" />
          </children>
       </Pane>
    </left>

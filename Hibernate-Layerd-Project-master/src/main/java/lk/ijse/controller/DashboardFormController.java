@@ -14,7 +14,10 @@ public class DashboardFormController {
     private Button btnCustomer;
 
     @FXML
-    private Button btnItem;
+    private Button btnProgram;
+
+    @FXML
+    private Button btnUser;
 
     @FXML
     private Pane rootNode;
@@ -28,10 +31,19 @@ public class DashboardFormController {
     }
 
     @FXML
-    void btnItemOnAction(ActionEvent event) {
+    void btnProgramOnAction(ActionEvent event) {
         rootNode.getChildren().clear();
         try {
             rootNode.getChildren().add(FXMLLoader.load(getClass().getResource("/view/programForm.fxml")));
+        } catch (IOException e) {}
+
+    }
+
+    @FXML
+    void btnUserOnAction(ActionEvent event) {
+        rootNode.getChildren().clear();
+        try {
+            rootNode.getChildren().add(FXMLLoader.load(getClass().getResource("/view/userForm.fxml")));
         } catch (IOException e) {}
 
     }

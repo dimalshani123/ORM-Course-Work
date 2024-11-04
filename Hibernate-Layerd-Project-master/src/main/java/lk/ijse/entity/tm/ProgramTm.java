@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ProgramTm {
-    private String itemCode;
+    private String programCode;
     private String name;
     private double price;
     private int duration;

@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Program {
     @Id
-    private String itemCode;
+    private String programCode;
     private String name;
     private double price;
     private int duration;
 
 
-    public Program(String itemCode, String name, double price, int duration) {
-        this.itemCode = itemCode;
+    public Program(String programCode, String name, double price, int duration) {
+        this.programCode = programCode;
         this.name = name;
         this.price = price;
         this.duration = duration;

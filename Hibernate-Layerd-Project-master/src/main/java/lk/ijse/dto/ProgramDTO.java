@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class ProgramDTO {
     @Id
-    private String itemCode;
+    private String programCode;
     private String name;
     private double price;
     private int duration;

@@ -1,14 +1,15 @@
 package lk.ijse.bo;
 
 import lk.ijse.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.bo.custom.impl.ItemBOImpl;
+import lk.ijse.bo.custom.impl.ProgramBOImpl;
+import lk.ijse.bo.custom.impl.UserBOImpl;
 
 public class BOFactory {
     private static BOFactory boFactory;
     private BOFactory(){}
 
     public enum BOType{
-        CUSTOMER,ITEM,ORDER,ORDER_DETAIL
+        CUSTOMER,PROGRAM,USER
     }
 
     public static BOFactory getBOFactory(){
@@ -18,8 +19,10 @@ public class BOFactory {
         switch (boType){
             case CUSTOMER :
                 return new CustomerBOImpl();
-            case ITEM :
-                return new ItemBOImpl();
+            case PROGRAM :
+                return new ProgramBOImpl();
+            case USER:
+                return new UserBOImpl();
             default:
                 return null;
         }
