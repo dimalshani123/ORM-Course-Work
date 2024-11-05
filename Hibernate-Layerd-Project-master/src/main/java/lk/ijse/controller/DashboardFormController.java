@@ -26,7 +26,7 @@ public class DashboardFormController {
     void btnCustomerOnAction(ActionEvent event) {
         rootNode.getChildren().clear();
         try {
-            rootNode.getChildren().add(FXMLLoader.load(getClass().getResource("/view/customerForm.fxml")));
+            rootNode.getChildren().add(FXMLLoader.load(getClass().getResource("/view/studentForm.fxml")));
         } catch (IOException e) {}
     }
 

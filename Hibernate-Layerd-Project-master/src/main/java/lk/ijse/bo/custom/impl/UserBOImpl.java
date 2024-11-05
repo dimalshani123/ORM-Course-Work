@@ -1,13 +1,9 @@
 package lk.ijse.bo.custom.impl;
 
-import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dao.DAOFactory;
-import lk.ijse.dao.custom.CustomerDAO;
 import lk.ijse.dao.custom.UserDAO;
-import lk.ijse.dto.CustomerDto;
 import lk.ijse.dto.UserDTO;
-import lk.ijse.entity.Customer;
 import lk.ijse.entity.User;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package lk.ijse.dao;
 
-import lk.ijse.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.dao.custom.impl.StudentDAOImpl;
 import lk.ijse.dao.custom.impl.ProgramDAOImpl;
 import lk.ijse.dao.custom.impl.UserDAOImpl;
 
@@ -9,15 +9,15 @@ public class DAOFactory {
     private DAOFactory(){}
 
     public enum DAOType{
-        CUSTOMER,PROGRAM,USER
+        STUDENT,PROGRAM,USER
     }
     public static DAOFactory getDaoFactory(){
         return daoFactory == null ? daoFactory = new DAOFactory() : daoFactory;
     }
     public SuperDAO getDAOType(DAOType boType){
         switch (boType){
-            case CUSTOMER :
-                return new CustomerDAOImpl();
+            case STUDENT :
+                return new StudentDAOImpl();
             case PROGRAM:
                 return new ProgramDAOImpl();
             case USER:

@@ -1,8 +1,8 @@
 package lk.ijse.dao.custom.impl;
 
 import lk.ijse.config.FactoryConfiguration;
-import lk.ijse.dao.custom.CustomerDAO;
-import lk.ijse.entity.Customer;
+import lk.ijse.dao.custom.StudentDAO;
+import lk.ijse.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
@@ -10,9 +10,9 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class CustomerDAOImpl implements CustomerDAO {
+public class StudentDAOImpl implements StudentDAO {
     @Override
-    public boolean save(Customer object) {
+    public boolean save(Student object) {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
         session.save(object);
@@ -22,7 +22,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean update(Customer object) {
+    public boolean update(Student object) {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
         session.update(object);
@@ -32,7 +32,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean delete(Customer object) {
+    public boolean delete(Student object) {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
         session.delete(object);
@@ -42,19 +42,19 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public Customer get(Customer object) {
+    public Student get(Student object) {
         return null;
     }
 
     @Override
-    public List<Customer> getAll() {
+    public List<Student> getAll() {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
 //        List<Customer> resultList1 = new ArrayList<>();
 //        session.find(Customer.class,Hha);
-        NativeQuery query = session.createNativeQuery("SELECT * FROM Customer");
-        query.addEntity(Customer.class);
-        List<Customer> resultList = query.getResultList();
+        NativeQuery query = session.createNativeQuery("SELECT * FROM Student");
+        query.addEntity(Student.class);
+        List<Student> resultList = query.getResultList();
         transaction.commit();
         session.close();
         return resultList;
@@ -64,7 +64,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public List<String> getIds() {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery(" select id from Customer");
+        Query query = session.createQuery(" select id from Student");
         List<String> list = query.getResultList();
         transaction.commit();
         session.close();
@@ -83,12 +83,12 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public Customer getObject(String value) {
+    public Student getObject(String value) {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from Customer where id = ?1");
+        Query query = session.createQuery("from Student where id = ?1");
         query.setParameter(1,value);
-        Customer customer = (Customer) query.uniqueResult();
+        Student customer = (Student) query.uniqueResult();
         transaction.commit();
         session.close();
         return customer;

@@ -1,10 +1,11 @@
 package lk.ijse.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Data
@@ -16,6 +17,8 @@ public class Program {
     private double price;
     private int duration;
 
+    @ManyToMany(mappedBy = "programs", cascade = CascadeType.ALL)
+    private Set<Student> customers = new HashSet<>();
 
     public Program(String programCode, String name, double price, int duration) {
         this.programCode = programCode;

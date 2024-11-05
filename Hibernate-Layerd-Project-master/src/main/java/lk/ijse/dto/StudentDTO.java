@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-public class CustomerDto {
+public class StudentDTO {
     @Id
     private String id;
     private String name;
     private String address;
     private int tel;
     private String email;
+    private Double payed;
 }
