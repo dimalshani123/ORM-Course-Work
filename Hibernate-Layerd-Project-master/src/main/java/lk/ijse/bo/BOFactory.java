@@ -9,7 +9,7 @@ public class BOFactory {
     private BOFactory(){}
 
     public enum BOType{
-        STUDENT,PROGRAM,USER
+        STUDENT,PROGRAM,USER,PAYMENT
     }
 
     public static BOFactory getBOFactory(){
@@ -22,6 +22,8 @@ public class BOFactory {
             case PROGRAM :
                 return new ProgramBOImpl();
             case USER:
+                return new UserBOImpl();
+            case PAYMENT:
                 return new UserBOImpl();
             default:
                 return null;

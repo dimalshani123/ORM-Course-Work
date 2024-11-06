@@ -19,20 +19,23 @@ public class Student {
     private String email;
     private Double payed;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
-            name = "customer_program",
-            joinColumns = @JoinColumn(name = "customer_id"),
+            name = "Student_Program",
+            joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "program_code")
     )
     private Set<Program> programs = new HashSet<>();
 
-    public Student(String id, String name, String address, int tel, String email,Double payed) {
+    @OneToMany(mappedBy = "student")
+    private Set<Payment> payments = new HashSet<>(); // One-to-many relationship with Payment
+
+    public Student(String id, String name, String address, int tel, String email, Double payed) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.tel = tel;
         this.email = email;
-        this.payed=payed;
+        this.payed = payed;
     }
 }

@@ -75,7 +75,7 @@ public class StudentDAOImpl implements StudentDAO {
     public String getCurrentId() {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("select id from Customer order by id desc limit 1");
+        Query query = session.createQuery("select id from Student order by id desc limit 1");
         String id = (String) query.uniqueResult();
         transaction.commit();
         session.close();

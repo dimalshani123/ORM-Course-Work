@@ -14,6 +14,10 @@ public class DashboardFormController {
     private Button btnCustomer;
 
     @FXML
+    private Button btnPayment;
+
+
+    @FXML
     private Button btnProgram;
 
     @FXML
@@ -27,8 +31,19 @@ public class DashboardFormController {
         rootNode.getChildren().clear();
         try {
             rootNode.getChildren().add(FXMLLoader.load(getClass().getResource("/view/studentForm.fxml")));
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
+
+    @FXML
+    void btnPaymentOnAction(ActionEvent event) {
+        rootNode.getChildren().clear();
+        try {
+            rootNode.getChildren().add(FXMLLoader.load(getClass().getResource("/view/paymentForm.fxml")));
+        } catch (IOException e) {
+        }
+    }
+
 
     @FXML
     void btnProgramOnAction(ActionEvent event) {

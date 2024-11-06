@@ -43,9 +43,6 @@ public class StudentFormController {
     private TableColumn<?, ?> clmPayed;
 
     @FXML
-    private ComboBox<?> cmbPId;
-
-    @FXML
     private TableView<StudentTm> tblCustomer;
 
     @FXML
@@ -167,10 +164,6 @@ public class StudentFormController {
 
     }
 
-    @FXML
-    void cmbPIdOnAction(ActionEvent event) {
-
-    }
 
 
 
@@ -215,6 +208,4 @@ public class StudentFormController {
             new Alert(Alert.AlertType.ERROR, "Customer delete unsuccessful").show();
         }
     }
-
-
 }

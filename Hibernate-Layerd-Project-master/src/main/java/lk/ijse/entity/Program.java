@@ -17,8 +17,11 @@ public class Program {
     private double price;
     private int duration;
 
-    @ManyToMany(mappedBy = "programs", cascade = CascadeType.ALL)
-    private Set<Student> customers = new HashSet<>();
+    @OneToMany(mappedBy = "program")
+    private Set<Payment> payments = new HashSet<>();
+
+    @ManyToMany(mappedBy = "programs")
+    private Set<Student> students = new HashSet<>();
 
     public Program(String programCode, String name, double price, int duration) {
         this.programCode = programCode;
