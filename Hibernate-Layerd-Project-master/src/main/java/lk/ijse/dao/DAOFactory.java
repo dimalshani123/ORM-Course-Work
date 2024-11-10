@@ -1,6 +1,7 @@
 package lk.ijse.dao;
 
 //import lk.ijse.dao.custom.impl.PaymentDAOImpl;
+import lk.ijse.dao.custom.impl.PaymentDAOImpl;
 import lk.ijse.dao.custom.impl.StudentDAOImpl;
 import lk.ijse.dao.custom.impl.ProgramDAOImpl;
 import lk.ijse.dao.custom.impl.UserDAOImpl;
@@ -23,8 +24,8 @@ public class DAOFactory {
                 return new ProgramDAOImpl();
             case USER:
                 return new UserDAOImpl();
-//            case PAYMENT:
-//                return new PaymentDAOImpl();
+            case PAYMENT:
+                return new PaymentDAOImpl();
             default:
                 return null;
         }

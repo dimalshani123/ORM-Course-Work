@@ -1,5 +1,6 @@
 package lk.ijse.bo;
 
+import lk.ijse.bo.custom.impl.PaymentBOImpl;
 import lk.ijse.bo.custom.impl.StudentBOImpl;
 import lk.ijse.bo.custom.impl.ProgramBOImpl;
 import lk.ijse.bo.custom.impl.UserBOImpl;
@@ -24,7 +25,7 @@ public class BOFactory {
             case USER:
                 return new UserBOImpl();
             case PAYMENT:
-                return new UserBOImpl();
+                return new PaymentBOImpl();
             default:
                 return null;
         }

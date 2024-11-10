@@ -7,9 +7,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.bo.BOFactory;
-//import lk.ijse.bo.custom.PaymentBO;
+import lk.ijse.bo.custom.PaymentBO;
 import lk.ijse.dao.custom.impl.ProgramDAOImpl;
 import lk.ijse.dao.custom.impl.StudentDAOImpl;
+import lk.ijse.dto.PaymentDTO;
+import lk.ijse.dto.ProgramDTO;
 import lk.ijse.entity.Program;
 import lk.ijse.entity.Student;
 import lk.ijse.entity.tm.PaymentTm;
@@ -28,28 +30,28 @@ public class PaymentController {
     private Button btnUpdate;
 
     @FXML
-    private TableColumn<?, ?> clmFinal;
+    private TableColumn<PaymentTm, String> clmFinal;
 
     @FXML
-    private TableColumn<?, ?> clmFullFee;
+    private TableColumn<PaymentTm, Double> clmFullFee;
 
     @FXML
-    private TableColumn<?, ?> clmId;
+    private TableColumn<PaymentTm, String> clmId;
 
     @FXML
-    private TableColumn<?, ?> clmLastPay;
+    private TableColumn<PaymentTm, Double> clmLastPay;
 
     @FXML
-    private TableColumn<?, ?> clmPId;
+    private TableColumn<PaymentTm, String> clmPId;
 
     @FXML
-    private TableColumn<?, ?> clmSID;
+    private TableColumn<PaymentTm, String> clmSID;
 
     @FXML
-    private ComboBox<String> cmbProgramId;  // Specify the type here
+    private ComboBox<String> cmbProgramId;
 
     @FXML
-    private ComboBox<String> cmbStudentId;  // Specify the type here
+    private ComboBox<String> cmbStudentId;
 
     @FXML
     private TableView<PaymentTm> tblPayment;
@@ -66,8 +68,7 @@ public class PaymentController {
     @FXML
     private TextField txtSLastPayment;
 
-//    PaymentBO paymentBO = (PaymentBO) BOFactory.getBOFactory().getBOType(BOFactory.BOType.PAYMENT);
-
+    private PaymentBO paymentBO = (PaymentBO) BOFactory.getBOFactory().getBOType(BOFactory.BOType.PAYMENT);
     private ProgramDAOImpl programDAOImpl = new ProgramDAOImpl();
     private StudentDAOImpl studentDAOImpl = new StudentDAOImpl();
 
@@ -75,113 +76,105 @@ public class PaymentController {
     private List<Student> studentsList;
 
     public void initialize() throws Exception {
-//        setPaymentTable();
-//        setCellValueFactory();
-//        tableSelection();
-//        generatePaymentId();
-        // Load programs into the combo box
+        setPaymentTable();
+        setCellValueFactory();
+        tableSelection();
+        generatePaymentId();
+
         programsList = programDAOImpl.getAll();
         for (Program program : programsList) {
             cmbProgramId.getItems().add(program.getProgramCode());
-            // Use ProgramCode as ID
-
         }
 
-        // Load students into the combo box
         studentsList = studentDAOImpl.getAll();
         for (Student student : studentsList) {
-            cmbStudentId.getItems().add(student.getId()); // Use Student ID
+            cmbStudentId.getItems().add(student.getId());
         }
 
-        // Set up combo box event handlers
         cmbStudentId.setOnAction(this::loadStudent);
         cmbProgramId.setOnAction(this::loadProgram);
     }
 
+    private void setPaymentTable() {
+        ObservableList<PaymentTm> paymentList = FXCollections.observableArrayList();
+        List<PaymentDTO> paymentDTOs = paymentBO.getAll();
+        for (PaymentDTO dto : paymentDTOs) {
+            paymentList.add(new PaymentTm(
+                    dto.getId(),
+                    dto.getStudentID(),
+                    dto.getProgramID(),
+                    dto.getFullFee(),
+                    dto.getRegisterPayment(),
+                    dto.getTotalFee()
+            ));
+        }
+        tblPayment.setItems(paymentList);
+    }
+
+    private void setCellValueFactory() {
+        clmId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        clmSID.setCellValueFactory(new PropertyValueFactory<>("studentID"));
+        clmPId.setCellValueFactory(new PropertyValueFactory<>("programID"));
+        clmFullFee.setCellValueFactory(new PropertyValueFactory<>("fullFee"));
+        clmLastPay.setCellValueFactory(new PropertyValueFactory<>("registerPayment"));
+        clmFinal.setCellValueFactory(new PropertyValueFactory<>("totalFee"));
+    }
+
+    private void tableSelection() {
+        tblPayment.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                txtId.setText(newValue.getId());
+                cmbStudentId.getSelectionModel().select(newValue.getStudentID());
+                cmbProgramId.getSelectionModel().select(newValue.getProgramID());
+                txtProgramFee.setText(String.valueOf(newValue.getFullFee()));
+                txtSLastPayment.setText(String.valueOf(newValue.getRegisterPayment()));
+                txtAmount.setText(String.valueOf(newValue.getTotalFee()));
+            }
+        });
+    }
+
+    private String generatePaymentId() {
+        try {
+            String currentId = paymentBO.getCurrentId();
+            if (currentId != null && currentId.matches("PP\\d{3}")) {
+                int idNum = Integer.parseInt(currentId.substring(2)) + 1;
+                String newId = String.format("PP%03d", idNum);
+                txtId.setText(newId);
+                return newId;
+            } else {
+                txtId.setText("PP001");
+                return "PP001";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error generating ID").show();
+        }
+        return null;
+    }
+
     void clearFields() {
         txtId.clear();
-        cmbStudentId.getItems().clear();
-        cmbProgramId.getItems().clear();
+        cmbStudentId.getSelectionModel().clearSelection();
+        cmbProgramId.getSelectionModel().clearSelection();
         txtProgramFee.clear();
         txtSLastPayment.clear();
         txtAmount.clear();
     }
 
-//    private String generatePaymentId() {
-//        try {
-//            String currentId = paymentBO.getCurrentId();
-//            if (currentId != null && currentId.matches("P\\d{3}")) {
-//                // Extract the numeric part and increment it
-//                int idNum = Integer.parseInt(currentId.substring(1)); // Removes the 'P' prefix and parses the number
-//                idNum++; // Increment the number
-//                String newId = String.format("P%03d", idNum); // Format the number as Pxxx (e.g., P001, P002)
-//                txtId.setText(newId);
-//                return newId;
-//            } else {
-//                // If currentId is null or format is not recognized, start from P001
-//                txtId.setText("P1");
-//                return "P1";
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            new Alert(Alert.AlertType.ERROR, "Error generating ID").show();
-//        }
-//
-//        return null;
-//    }
-//
-//    private void tableSelection() {
-//        tblPayment.setOnMouseClicked(event -> {
-//            int index = tblPayment.getSelectionModel().getSelectedIndex();
-//            txtId.setText(String.valueOf(clmId.getCellData(index)));
-//            cmbStudentId.setValue(String.valueOf(clmSID.getCellData(index))); // Use setValue for ComboBox
-//            cmbProgramId.setValue(String.valueOf(clmPId.getCellData(index))); // Use setValue for ComboBox
-//            txtProgramFee.setText(String.valueOf(clmFullFee.getCellData(index)));
-//            txtSLastPayment.setText(String.valueOf(clmLastPay.getCellData(index)));
-//            txtAmount.setText(String.valueOf(clmFinal.getCellData(index)));
-//        });
-//    }
-//
-//    private void setCellValueFactory() {
-//        clmId.setCellValueFactory(new PropertyValueFactory<>("programCode"));
-//        clmSID.setCellValueFactory(new PropertyValueFactory<>("student Id"));
-//        clmPId.setCellValueFactory(new PropertyValueFactory<>("program Id"));
-//        clmFullFee.setCellValueFactory(new PropertyValueFactory<>("full pay"));
-//        clmLastPay.setCellValueFactory(new PropertyValueFactory<>("last pay"));
-//        clmFinal.setCellValueFactory(new PropertyValueFactory<>("final"));
-//    }
-//
-//    private void setPaymentTable() {
-//        tblPayment.setOnMouseClicked(event -> {
-//            // Get the selected index from the table view
-//            int index = tblPayment.getSelectionModel().getSelectedIndex();
-//            if (index != -1) { // Ensure a row is selected
-//                // Get the selected PaymentTm from the table
-//                PaymentTm selectedPayment = tblPayment.getItems().get(index);
-//
-//                // Update the TextField and ComboBox values with the data from the selected row
-//                txtId.setText(selectedPayment.getId());  // Set the Payment ID
-//
-//                cmbStudentId.setValue(selectedPayment.getStudentID());  // Set the Student ID in ComboBox
-//
-//                cmbProgramId.setValue(selectedPayment.getProgramID());  // Set the Program ID in ComboBox
-//
-//                txtProgramFee.setText(String.valueOf(selectedPayment.getFullFee()));  // Set Program Fee
-//
-//                txtSLastPayment.setText(String.valueOf(selectedPayment.getRegisterPayment()));  // Set Last Payment
-//
-//                txtAmount.setText(String.valueOf(selectedPayment.getTotalFee()));  // Set the Total Amount
-//            }
-//        });
-//    }
-//
+    public void setAmount() {
+        try {
+            double programFee = Double.parseDouble(txtProgramFee.getText());
+            double studentRegisterFee = Double.parseDouble(txtSLastPayment.getText());
+            double amount = programFee - studentRegisterFee;
+            txtAmount.setText(String.valueOf(amount));
+        } catch (NumberFormatException e) {
+            txtAmount.clear();
+        }
+    }
 
-
-    // Method to load student details when a student is selected
     public void loadStudent(ActionEvent actionEvent) {
         String selectedStudentId = cmbStudentId.getSelectionModel().getSelectedItem();
         if (selectedStudentId != null) {
-            // Find the student with the selected ID from the studentsList
             Student selectedStudent = studentsList.stream()
                     .filter(student -> student.getId().equals(selectedStudentId))
                     .findFirst()
@@ -193,75 +186,90 @@ public class PaymentController {
                 txtSLastPayment.clear();
             }
         }
+        setAmount();
     }
 
-    // Method to load program details when a program is selected
     public void loadProgram(ActionEvent actionEvent) {
         String selectedProgramId = cmbProgramId.getSelectionModel().getSelectedItem();
         if (selectedProgramId != null) {
-            // Find the program with the selected ProgramCode from the programsList
             Program selectedProgram = programsList.stream()
                     .filter(program -> program.getProgramCode().equals(selectedProgramId))
                     .findFirst()
                     .orElse(null);
 
             if (selectedProgram != null) {
-                txtProgramFee.setText(String.valueOf(selectedProgram.getPrice())); // Program fee
+                txtProgramFee.setText(String.valueOf(selectedProgram.getPrice()));
             } else {
                 txtProgramFee.clear();
             }
         }
+        setAmount();
     }
 
-    // Handler for Delete button
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        // Handle delete logic here
+        boolean isDeleted = paymentBO.delete(new PaymentDTO(txtId.getText(), cmbStudentId.getValue(),cmbProgramId.getValue(), Double.parseDouble(txtProgramFee.getText()), Double.parseDouble(txtSLastPayment.getText()),Double.parseDouble(txtAmount.getText())));
+        if (isDeleted) {
+            clearFields();
+            setPaymentTable();
+            setCellValueFactory();
+            tblPayment.refresh();
+            new Alert(Alert.AlertType.CONFIRMATION, "Payment deleted successfully").show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Payment deleted unsuccessfully");
+        }
     }
 
-    // Handler for Save button
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        // Handle save logic here
+        boolean isSaved = paymentBO.save(new PaymentDTO(txtId.getText(), cmbStudentId.getValue(),cmbProgramId.getValue(), Double.parseDouble(txtProgramFee.getText()), Double.parseDouble(txtSLastPayment.getText()),Double.parseDouble(txtAmount.getText())));
+        if (isSaved) {
+            clearFields();
+            txtId.setText(generatePaymentId());
+            setPaymentTable();
+            setCellValueFactory();
+            tblPayment.refresh();
+            new Alert(Alert.AlertType.CONFIRMATION, "Payment saved successfully").show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Payment saved unsuccessfully");
+        }
     }
 
-    // Handler for Update button
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        // Handle update logic here
+        boolean isUpdated = paymentBO.update(new PaymentDTO(txtId.getText(), cmbStudentId.getValue(),cmbProgramId.getValue(), Double.parseDouble(txtProgramFee.getText()), Double.parseDouble(txtSLastPayment.getText()),Double.parseDouble(txtAmount.getText())));
+        if (isUpdated) {
+            clearFields();
+            setPaymentTable();
+            setCellValueFactory();
+            tblPayment.refresh();
+            new Alert(Alert.AlertType.CONFIRMATION, "Payment updated successfully").show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Payment updated unsuccessfully");
+        }
     }
 
-    // Handler for Amount TextField
     @FXML
     void txtAmountOnAction(ActionEvent event) {
-        // Handle amount input if necessary
     }
 
-    // Handler for Id TextField
     @FXML
     void txtIdOnAction(ActionEvent event) {
-        // Handle ID input if necessary
     }
 
-    // Handler for Program Fee TextField
     @FXML
     void txtProgramFeeOnAction(ActionEvent event) {
-        // Handle program fee input if necessary
     }
 
-    // Handler for Last Payment TextField
     @FXML
     void txtSLastPaymentOnAction(ActionEvent event) {
-        // Handle last payment input if necessary
     }
 
     @FXML
     void cmbProgramOnAction(ActionEvent event) {
-
     }
 
     @FXML
     void cmbStudentOnAction(ActionEvent event) {
-
     }
 }

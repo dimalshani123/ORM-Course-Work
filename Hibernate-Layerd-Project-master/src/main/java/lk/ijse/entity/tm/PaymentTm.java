@@ -1,14 +1,15 @@
 package lk.ijse.entity.tm;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
-@Entity
+
 public class PaymentTm {
-    @Id
     private String id;
     private String studentID;
     private String programID;
