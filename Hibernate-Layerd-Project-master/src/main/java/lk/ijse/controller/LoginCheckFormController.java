@@ -9,9 +9,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import lk.ijse.config.FactoryConfiguration;
+import lk.ijse.entity.User;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.io.IOException;
-import java.sql.*;
 
 public class LoginCheckFormController {
 
@@ -25,23 +28,50 @@ public class LoginCheckFormController {
     private TextField txtUserName;
 
     @FXML
+    private TextField txtPossition;
+
+    @FXML
     void btnEnterOnAction(ActionEvent event) {
+        String name = txtUserName.getText();
+        String password = txtPassword.getText();
+        String position = txtPossition.getText();
 
-        try {
-            // Load the FXML file
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/dashboardForm.fxml"));
-            Parent root = fxmlLoader.load();
+        User user = validateLogin(name, password, position);
 
-            // Create a new stage (window)
-            Stage stage = new Stage();
-            stage.setTitle("User Form");
-            stage.setScene(new Scene(root));
+        if (user != null) {
+            try {
+                String fxmlFile = position.equalsIgnoreCase("admin") ? "/view/dashboardForm.fxml" : "/view/dashboardForm2.fxml";
 
-            // Show the new stage
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace(); // Log or handle the exception appropriately
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
+                Parent root = fxmlLoader.load();
+
+                Stage stage = new Stage();
+                stage.setTitle("Dashboard");
+                stage.setScene(new Scene(root));
+                stage.show();
+
+                ((Stage) btnEnter.getScene().getWindow()).close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid username, password, or position.");
+            alert.showAndWait();
         }
+    }
 
-}
+    private User validateLogin(String name, String password, String position) {
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            Query<User> query = session.createQuery(
+                    "FROM User WHERE name = :name AND password = :password AND position = :position", User.class);
+            query.setParameter("name", name);
+            query.setParameter("password", password);
+            query.setParameter("position", position);
+
+            return query.uniqueResult();
+        }
+    }
 }

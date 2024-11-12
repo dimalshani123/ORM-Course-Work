@@ -14,7 +14,7 @@ public class LauncherWrapper extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/loginForm.fxml"));
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/loginCheckForm.fxml"));
         Scene scene = new Scene(anchorPane);
         stage.setScene(scene);
         stage.setTitle("Login Form");
