@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -8,7 +10,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.DashboardFormController">
    <left>
-      <Pane prefHeight="400.0" prefWidth="130.0" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER">
+      <Pane prefHeight="400.0" prefWidth="130.0" style="-fx-background-color: #F8EFBA;" BorderPane.alignment="CENTER">
          <children>
             <Text layoutX="23.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dashboard">
                <font>
@@ -23,6 +25,13 @@
       </Pane>
    </left>
    <center>
-      <Pane fx:id="rootNode" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+      <Pane fx:id="rootNode" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="1.0">
+               <image>
+                  <Image url="@../view/images/OIP.jpeg" />
+               </image>
+            </ImageView>
+         </children></Pane>
    </center>
 </BorderPane>

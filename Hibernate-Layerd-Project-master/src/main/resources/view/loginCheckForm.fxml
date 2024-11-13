@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.LoginCheckFormController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #F8EFBA;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.LoginCheckFormController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="96.0" prefHeight="30.0" prefWidth="116.0" text="User Name">
          <font>
@@ -20,7 +20,10 @@
          </font>
       </Label>
       <TextField fx:id="txtPassword" layoutX="203.0" layoutY="153.0" opacity="0.42" prefHeight="38.0" prefWidth="266.0" style="-fx-background-color: white;" />
-      <Button fx:id="btnEnter" contentDisplay="CENTER" layoutX="249.0" layoutY="300.0" mnemonicParsing="false" onAction="#btnEnterOnAction" prefHeight="30.0" prefWidth="86.0" text="Enter" />
+      <Button fx:id="btnEnter" contentDisplay="CENTER" layoutX="256.0" layoutY="302.0" mnemonicParsing="false" onAction="#btnEnterOnAction" prefHeight="30.0" prefWidth="86.0" style="-fx-background-color: #bdc3c7;" text="Enter">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
       <TextField fx:id="txtPossition" layoutX="203.0" layoutY="215.0" opacity="0.42" prefHeight="38.0" prefWidth="266.0" style="-fx-background-color: white;" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="66.0" layoutY="219.0" prefHeight="30.0" prefWidth="116.0" text="Possition">
          <font>
