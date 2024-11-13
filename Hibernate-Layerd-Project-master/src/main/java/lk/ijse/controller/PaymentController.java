@@ -251,14 +251,17 @@ public class PaymentController {
 
     @FXML
     void txtAmountOnAction(ActionEvent event) {
+
     }
 
     @FXML
     void txtIdOnAction(ActionEvent event) {
+
     }
 
     @FXML
     void txtProgramFeeOnAction(ActionEvent event) {
+
     }
 
     @FXML

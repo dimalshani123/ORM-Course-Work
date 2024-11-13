@@ -136,32 +136,32 @@ public class StudentFormController {
 
     @FXML
     void txtAddressOnAction(ActionEvent event) {
-
+        txtEmail.requestFocus();
     }
 
     @FXML
     void txtContactOnAction(ActionEvent event) {
-
+        txtPayed.requestFocus();
     }
 
     @FXML
     void txtEmailOnAction(ActionEvent event) {
-
+        txtContact.requestFocus();
     }
 
     @FXML
     void txtIdOnAction(ActionEvent event) {
-
+        txtName.requestFocus();
     }
 
     @FXML
     void txtNameOnAction(ActionEvent event) {
-
+        txtAddress.requestFocus();
     }
 
     @FXML
     void txtPayedOnAction(ActionEvent event) {
-
+        txtId.requestFocus();
     }
 
 

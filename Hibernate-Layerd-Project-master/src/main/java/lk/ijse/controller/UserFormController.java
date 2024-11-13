@@ -151,22 +151,34 @@ public class UserFormController {
     }
 
     @FXML
-    void txtContactOnAction(ActionEvent event) {}
+    void txtContactOnAction(ActionEvent event) {
+        txtPossition.requestFocus();
+    }
 
     @FXML
-    void txtEmailOnAction(ActionEvent event) {}
+    void txtEmailOnAction(ActionEvent event) {
+        txtContact.requestFocus();
+    }
 
     @FXML
-    void txtIdOnAction(ActionEvent event) {}
+    void txtIdOnAction(ActionEvent event) {
+        txtName.requestFocus();
+    }
 
     @FXML
-    void txtNameOnAction(ActionEvent event) {}
+    void txtNameOnAction(ActionEvent event) {
+        txtPassword.requestFocus();
+    }
 
     @FXML
-    void txtPasswordOnAction(ActionEvent event) {}
+    void txtPasswordOnAction(ActionEvent event) {
+        txtEmail.requestFocus();
+    }
 
     @FXML
-    void txtPossitionOnAction(ActionEvent event) {}
+    void txtPossitionOnAction(ActionEvent event) {
+        txtId.requestFocus();
+    }
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
         String hashedPassword = hashPassword(txtPassword.getText());

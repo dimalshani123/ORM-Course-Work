@@ -200,6 +200,6 @@ public class ProgramFormController {
 
     @FXML
     void txtPriceOnAction(ActionEvent event) {
-        btnSaveOnAction(event);
+        txtDuration.requestFocus();
     }
 }
