@@ -15,6 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginCheckFormController {
 
@@ -36,7 +38,11 @@ public class LoginCheckFormController {
         String password = txtPassword.getText();
         String position = txtPossition.getText();
 
-        User user = validateLogin(name, password, position);
+        // Hash the entered password, skip hashing if the position is "admin"
+        String hashedPassword = position.equalsIgnoreCase("admin") ? password : hashPassword(password);
+
+        // Validate login with hashed password
+        User user = validateLogin(name, hashedPassword, position);
 
         if (user != null) {
             try {
@@ -63,15 +69,31 @@ public class LoginCheckFormController {
         }
     }
 
-    private User validateLogin(String name, String password, String position) {
+    private User validateLogin(String name, String hashedPassword, String position) {
         try (Session session = FactoryConfiguration.getInstance().getSession()) {
             Query<User> query = session.createQuery(
                     "FROM User WHERE name = :name AND password = :password AND position = :position", User.class);
             query.setParameter("name", name);
-            query.setParameter("password", password);
+            query.setParameter("password", hashedPassword);
             query.setParameter("position", position);
 
             return query.uniqueResult();
+        }
+    }
+
+    // Utility method to hash password using SHA-256 (matches UserFormController hashing)
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

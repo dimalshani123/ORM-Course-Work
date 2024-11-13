@@ -11,6 +11,8 @@ import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.UserDTO;
 import lk.ijse.entity.tm.UserTm;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class UserFormController {
@@ -126,84 +128,87 @@ public class UserFormController {
         ObservableList<UserTm> userTms = FXCollections.observableArrayList();
         List<UserDTO> all = userBo.getAll();
         for (UserDTO userDTO : all){
-            UserTm userTm = new UserTm(userDTO.getId(), userDTO.getName(), userDTO.getPossition(), userDTO.getTel(), userDTO.getEmail(),userDTO.getPassword());
+            UserTm userTm = new UserTm(userDTO.getId(), userDTO.getName(), userDTO.getPossition(), userDTO.getTel(), userDTO.getEmail(), userDTO.getPassword());
             userTms.add(userTm);
         }
         tblUser.setItems(userTms);
     }
 
-
-
-    @FXML
-    void txtContactOnAction(ActionEvent event) {
-
+    // Utility method to hash password using SHA-256
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @FXML
-    void txtEmailOnAction(ActionEvent event) {
-
-    }
+    void txtContactOnAction(ActionEvent event) {}
 
     @FXML
-    void txtIdOnAction(ActionEvent event) {
-
-    }
+    void txtEmailOnAction(ActionEvent event) {}
 
     @FXML
-    void txtNameOnAction(ActionEvent event) {
-
-    }
+    void txtIdOnAction(ActionEvent event) {}
 
     @FXML
-    void txtPasswordOnAction(ActionEvent event) {
-
-    }
+    void txtNameOnAction(ActionEvent event) {}
 
     @FXML
-    void txtPossitionOnAction(ActionEvent event) {
+    void txtPasswordOnAction(ActionEvent event) {}
 
-    }
+    @FXML
+    void txtPossitionOnAction(ActionEvent event) {}
+
     public void btnSaveOnAction(ActionEvent actionEvent) {
-        boolean isSaved = userBo.save(new UserDTO(txtId.getText(), txtName.getText(), txtPossition.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(),txtPassword.getText()));
+        String hashedPassword = hashPassword(txtPassword.getText());
+        boolean isSaved = userBo.save(new UserDTO(txtId.getText(), txtName.getText(), txtPossition.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(), hashedPassword));
         if (isSaved){
             clearTextFields();
             setTable();
             setCellValueFactory();
             tblUser.refresh();
             txtId.setText(generateUserId());
-            new Alert(Alert.AlertType.CONFIRMATION,"User save successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "User saved successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR,"User save unsuccessfully").show();
+            new Alert(Alert.AlertType.ERROR, "User save failed").show();
         }
     }
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
-        boolean isUpdated = userBo.update(new UserDTO(txtId.getText(), txtName.getText(), txtPossition.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(),txtPassword.getText()));
+        String hashedPassword = hashPassword(txtPassword.getText());
+        boolean isUpdated = userBo.update(new UserDTO(txtId.getText(), txtName.getText(), txtPossition.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(), hashedPassword));
         if (isUpdated){
             clearTextFields();
             setTable();
             setCellValueFactory();
             tblUser.refresh();
             txtId.setText(generateUserId());
-            new Alert(Alert.AlertType.CONFIRMATION,"User update successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "User updated successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR,"User update unsuccessfully").show();
+            new Alert(Alert.AlertType.ERROR, "User update failed").show();
         }
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        boolean isDeleted = userBo.delete(new UserDTO(txtId.getText(), txtName.getText(), txtPossition.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(),txtPassword.getText()));
+        boolean isDeleted = userBo.delete(new UserDTO(txtId.getText(), txtName.getText(), txtPossition.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(), txtPassword.getText()));
         if (isDeleted){
             clearTextFields();
             setTable();
             setCellValueFactory();
             tblUser.refresh();
             txtId.setText(generateUserId());
-            new Alert(Alert.AlertType.CONFIRMATION,"User delete successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "User deleted successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR,"User delete unsuccessfully").show();
+            new Alert(Alert.AlertType.ERROR, "User delete failed").show();
         }
     }
 }
-
-
