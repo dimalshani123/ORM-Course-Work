@@ -15,7 +15,7 @@ public class Program {
     private String programCode;
     private String name;
     private double price;
-    private int duration;
+    private String duration;
 
     @OneToMany(mappedBy = "program")
     private Set<Payment> payments = new HashSet<>();
@@ -23,7 +23,7 @@ public class Program {
     @ManyToMany(mappedBy = "programs")
     private Set<Student> students = new HashSet<>();
 
-    public Program(String programCode, String name, double price, int duration) {
+    public Program(String programCode, String name, double price, String duration) {
         this.programCode = programCode;
         this.name = name;
         this.price = price;

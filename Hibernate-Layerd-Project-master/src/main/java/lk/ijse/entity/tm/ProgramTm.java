@@ -11,5 +11,5 @@ public class ProgramTm {
     private String programCode;
     private String name;
     private double price;
-    private int duration;
+    private String duration;
 }

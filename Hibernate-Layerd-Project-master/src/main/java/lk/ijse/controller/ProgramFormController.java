@@ -139,7 +139,7 @@ public class ProgramFormController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        boolean isDeleted = programBO.delete(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
+        boolean isDeleted = programBO.delete(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), txtDuration.getText()));
         if (isDeleted) {
             clearFields();
             setItemTable();
@@ -155,7 +155,7 @@ public class ProgramFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        boolean isSaved = programBO.save(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
+        boolean isSaved = programBO.save(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), txtDuration.getText()));
         if (isSaved) {
             clearFields();
             txtId.setText(generateItemId());
@@ -170,7 +170,7 @@ public class ProgramFormController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        boolean isUpdated = programBO.update(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), Integer.parseInt(txtDuration.getText())));
+        boolean isUpdated = programBO.update(new ProgramDTO(txtId.getText(), txtItem.getText(), Double.parseDouble(txtPrice.getText()), txtDuration.getText()));
         if (isUpdated) {
             clearFields();
             setItemTable();
