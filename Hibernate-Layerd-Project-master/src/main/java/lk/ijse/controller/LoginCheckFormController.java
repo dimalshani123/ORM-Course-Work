@@ -96,4 +96,19 @@ public class LoginCheckFormController {
             return null;
         }
     }
+
+    @FXML
+    void txtPasswordOnAction(ActionEvent event) {
+        txtPossition.requestFocus();
+    }
+
+    @FXML
+    void txtPossitionOnAction(ActionEvent event) {
+        btnEnterOnAction(event);
+    }
+
+    @FXML
+    void txtUserNameOnAction(ActionEvent event) {
+        txtPassword.requestFocus();
+    }
 }
