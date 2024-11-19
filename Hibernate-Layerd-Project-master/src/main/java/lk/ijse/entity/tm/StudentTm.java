@@ -13,5 +13,6 @@ public class StudentTm {
     private String address;
     private int tel;
     private String email;
-    private Double payed;
+    private double payed;
+    private String userId;
 }

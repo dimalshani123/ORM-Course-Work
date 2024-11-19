@@ -1,11 +1,12 @@
 package lk.ijse.dao.custom.impl;
 
 import lk.ijse.config.FactoryConfiguration;
+import lk.ijse.dao.custom.ProgramDAO;
 import lk.ijse.dao.custom.StudentDAO;
+import lk.ijse.entity.Program;
 import lk.ijse.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -32,10 +33,16 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public boolean delete(Student object) {
+    public boolean update(Session session, Student object) {
+        session.update(object);
+        return true;
+    }
+
+    @Override
+    public boolean delete(Student value) {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        session.delete(object);
+        session.delete(value);
         transaction.commit();
         session.close();
         return true;
@@ -50,10 +57,7 @@ public class StudentDAOImpl implements StudentDAO {
     public List<Student> getAll() {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-//        List<Customer> resultList1 = new ArrayList<>();
-//        session.find(Customer.class,Hha);
-        NativeQuery query = session.createNativeQuery("SELECT * FROM Student");
-        query.addEntity(Student.class);
+        Query query = session.createQuery("from Student ");
         List<Student> resultList = query.getResultList();
         transaction.commit();
         session.close();
@@ -64,11 +68,11 @@ public class StudentDAOImpl implements StudentDAO {
     public List<String> getIds() {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery(" select id from Student");
-        List<String> list = query.getResultList();
+        Query query = session.createNativeQuery("select id from Student");
+        List<String> resultList = query.getResultList();
         transaction.commit();
         session.close();
-        return list;
+        return resultList;
     }
 
     @Override
@@ -88,9 +92,10 @@ public class StudentDAOImpl implements StudentDAO {
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from Student where id = ?1");
         query.setParameter(1,value);
-        Student customer = (Student) query.uniqueResult();
+        Student student = (Student) query.uniqueResult();
+        System.out.println(student);
         transaction.commit();
         session.close();
-        return customer;
+        return student;
     }
 }

@@ -8,7 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.StudentBO;
+import lk.ijse.bo.custom.UserBO;
 import lk.ijse.dto.StudentDTO;
+import lk.ijse.dto.UserDTO;
 import lk.ijse.entity.tm.StudentTm;
 
 import java.util.List;
@@ -43,6 +45,12 @@ public class StudentFormController {
     private TableColumn<?, ?> clmPayed;
 
     @FXML
+    private TableColumn<?, ?> clmUserId;
+
+    @FXML
+    private ComboBox<String> cmbUserID;
+
+    @FXML
     private TableView<StudentTm> tblCustomer;
 
     @FXML
@@ -63,13 +71,53 @@ public class StudentFormController {
     @FXML
     private TextField txtPayed;
 
+    @FXML
+    void txtAddressOnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void txtContactOnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void txtEmailOnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void txtIdOnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void txtNameOnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void txtPayedOnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void cmbUserIDOnAction(ActionEvent event) {
+
+    }
+
+
     StudentBO studentBO = (StudentBO) BOFactory.getBOFactory().getBOType(BOFactory.BOType.STUDENT);
+
+
+    private UserBO userBO = (UserBO) BOFactory.getBOFactory().getBOType(BOFactory.BOType.USER);  // Assuming you have UserBO
 
     public void initialize() {
         setTable();
         setCellValueFactory();
         selectTableRow();
         generateCustomerId();
+        loadUserIds();
     }
 
     void clearTextFields() {
@@ -79,6 +127,7 @@ public class StudentFormController {
         txtEmail.clear();
         txtContact.clear();
         txtPayed.clear();
+        cmbUserID.getSelectionModel().clearSelection();
     }
 
     private String generateCustomerId() {
@@ -111,6 +160,7 @@ public class StudentFormController {
             txtEmail.setText(studentTm.getEmail());
             txtContact.setText(String.valueOf(studentTm.getTel()));
             txtPayed.setText(String.valueOf(studentTm.getPayed()));
+            cmbUserID.getSelectionModel().select(studentTm.getUserId());
         });
     }
 
@@ -121,82 +171,59 @@ public class StudentFormController {
         clmEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         clmContact.setCellValueFactory(new PropertyValueFactory<>("tel"));
         clmPayed.setCellValueFactory(new PropertyValueFactory<>("payed"));
+        clmUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
     }
 
     private void setTable() {
         ObservableList<StudentTm> studentTms = FXCollections.observableArrayList();
         List<StudentDTO> all = studentBO.getAll();
         for (StudentDTO customerDto : all) {
-            StudentTm customerTm = new StudentTm(customerDto.getId(), customerDto.getName(), customerDto.getAddress(), customerDto.getTel(), customerDto.getEmail(), customerDto.getPayed());
+            StudentTm customerTm = new StudentTm(customerDto.getId(), customerDto.getName(), customerDto.getAddress(), customerDto.getTel(), customerDto.getEmail(), customerDto.getPayed(), customerDto.getUserId());
             studentTms.add(customerTm);
         }
         tblCustomer.setItems(studentTms);
     }
 
-
-    @FXML
-    void txtAddressOnAction(ActionEvent event) {
-        txtEmail.requestFocus();
+    private void loadUserIds() {
+        ObservableList<String> userIds = FXCollections.observableArrayList();
+        List<UserDTO> allUsers = userBO.getAll();
+        for (UserDTO userDto : allUsers) {
+            userIds.add(userDto.getId());
+        }
+        cmbUserID.setItems(userIds);  // Set the ComboBox items to the loaded user IDs
     }
-
-    @FXML
-    void txtContactOnAction(ActionEvent event) {
-        txtPayed.requestFocus();
-    }
-
-    @FXML
-    void txtEmailOnAction(ActionEvent event) {
-        txtContact.requestFocus();
-    }
-
-    @FXML
-    void txtIdOnAction(ActionEvent event) {
-        txtName.requestFocus();
-    }
-
-    @FXML
-    void txtNameOnAction(ActionEvent event) {
-        txtAddress.requestFocus();
-    }
-
-    @FXML
-    void txtPayedOnAction(ActionEvent event) {
-        txtId.requestFocus();
-    }
-
-
-
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
-        boolean isSaved = studentBO.save(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(),Double.parseDouble(txtPayed.getText())));
-        if (isSaved){
+        boolean isSaved = studentBO.save(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(), Double.parseDouble(txtPayed.getText()), cmbUserID.getValue()));
+        if (isSaved) {
             clearTextFields();
             setTable();
             setCellValueFactory();
             tblCustomer.refresh();
             txtId.setText(generateCustomerId());
-            new Alert(Alert.AlertType.CONFIRMATION,"Customer save successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "Customer save successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR,"Customer save unsuccessfully").show();
+            new Alert(Alert.AlertType.ERROR, "Customer save unsuccessfully").show();
         }
     }
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
-        boolean isUpdated = studentBO.update(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(),Double.parseDouble(txtPayed.getText())));
-        if (isUpdated){
+        boolean isUpdated = studentBO.update(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(), Double.parseDouble(txtPayed.getText()), cmbUserID.getValue()));
+        if (isUpdated) {
             clearTextFields();
             setTable();
             setCellValueFactory();
             tblCustomer.refresh();
             txtId.setText(generateCustomerId());
-            new Alert(Alert.AlertType.CONFIRMATION,"Customer update successfully").show();
+            new Alert(Alert.AlertType.CONFIRMATION, "Customer update successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR,"Customer update unsuccessfully").show();
+            new Alert(Alert.AlertType.ERROR, "Customer update unsuccessfully").show();
         }
     }
 
+
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        boolean isDeleted = studentBO.delete(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(), Double.parseDouble(txtPayed.getText())));
+        boolean isDeleted = studentBO.delete(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), Integer.parseInt(txtContact.getText()), txtEmail.getText(), Double.parseDouble(txtPayed.getText()), cmbUserID.getValue()));
         if (isDeleted) {
             clearTextFields();
             setTable();
@@ -209,3 +236,4 @@ public class StudentFormController {
         }
     }
 }
+

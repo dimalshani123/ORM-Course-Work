@@ -18,6 +18,12 @@ public class Student {
     private int tel;
     private String email;
     private Double payed;
+    private  String userId;
+
+    // Many-to-One relationship with User (Many students can belong to one user)
+    @ManyToOne
+    @JoinColumn(name = "user_id") // The foreign key in the Student table
+    private User user;
 
     @ManyToMany
     @JoinTable(
@@ -30,12 +36,13 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private Set<Payment> payments = new HashSet<>(); // One-to-many relationship with Payment
 
-    public Student(String id, String name, String address, int tel, String email, Double payed) {
+    public Student(String id, String name, String address, int tel, String email, Double payed, String userId) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.tel = tel;
         this.email = email;
         this.payed = payed;
+        this.userId = userId;
     }
 }

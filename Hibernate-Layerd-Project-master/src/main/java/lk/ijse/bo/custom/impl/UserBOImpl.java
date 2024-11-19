@@ -50,4 +50,5 @@ public class UserBOImpl implements UserBO {
     public String getCurrentId() {
         return userDAO.getCurrentId();
     }
+
 }
